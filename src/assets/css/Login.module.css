@@ -1,0 +1,24 @@
+.wallpaper {
+  background: url("../img/login-wallpeper.jpg"); 
+}
+
+.logoClass { 
+  display: inline-block;
+  line-height: 1em;
+  overflow: hidden;
+  width: 100%;
+  height: 100px;
+}
+
+.formStyle {
+  color: #DC1A28;
+}
+
+form {
+  border-radius: 10px;
+}
+
+.buttons {
+  background-color: #DC1A28;
+  color:white
+}
