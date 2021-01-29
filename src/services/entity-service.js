@@ -13,7 +13,7 @@ export const login = (email, password) =>
             .then(function (res) {
                 console.log(res);
                 var token = res.access_token;
-                authService.login(token);
+                authService.login(token); // call authservice.login to set token to localstorage
                 resolve(res);
             })
             .catch(function (res) {
@@ -27,10 +27,19 @@ export const login = (email, password) =>
 
         http("GET", url, '', false)
             .then(function (res) {
-            
+
             let movieByGenre = {
             genreName : genre,
-            list: res.results
+            list: res.results,
+            position: {
+                movie: 0,
+                genre: 0,
+                minDisplayedMovie: 0,
+                maxDisplayedMovie: 5
+            }
+            ,
+            minIndexMovie: 0,
+            maxIndexMovie: res.results.length,
             }
             resolve(movieByGenre);
             

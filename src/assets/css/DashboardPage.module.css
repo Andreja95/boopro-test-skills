@@ -1,33 +1,18 @@
-/* body .container-fluid {
-	font-family: 'Arial', sans-serif;
-	-webkit-font-smoothing: antialiased;
-  height: auto;
-}
-h2 {
-    color: white;
-} */
-
-  /* background: #000; */
-
-
-/* .row-genre {
-height: 200px !important;
-}
-.container-fluid {
-  height: 100%;
-} */
-
-/* .row-flex {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.carousel {
-  height: 100%;
-  padding: 20px 20px 10px;
-  color: #fff;
-} */
-
 .wallpaper {
-  background: #000;
+  background: #141414;
+  color: white;
+}
+
+.movie_app > .row {
+  overflow-x: auto;
+  flex-wrap: nowrap;
+}
+
+html, body, #root, .App {
+  height: 100%;
+  width: 100%;
+}
+
+.carousel_control_next {
+  display: none !important;
 }

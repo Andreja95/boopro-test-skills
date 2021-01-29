@@ -13,7 +13,14 @@ body {
     monospace;
 } */
 
-html, body, #root {
+/* html, body, #root {
   height: 100%;
   width: 100%;
+} */
+html, body, #app, #app>div {
+  height: 100%;
+  width: auto;
+}
+#root {
+  min-height: 100vh;
 }

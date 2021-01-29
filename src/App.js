@@ -7,7 +7,7 @@ import Home from './pages/Home.js'
 function App() {
   return (
     <Router>
-      <Route path="/home" component={Home} />
+      <Route path="/" component={Home} exact/>
       <Route path="/login" component={Login} />
       <Route path="/dashboard-page" component={DashboardPage} />
     </Router>
