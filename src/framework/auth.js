@@ -1,19 +1,19 @@
 import config from '../config';
 
 class AuthService {
-    isAuth = () => {
-        let isAuth = (sessionStorage.getItem(config.TOKEN) !== undefined
-            && sessionStorage.getItem(config.TOKEN) !== null)
-            || config.IS_DEV
-        return isAuth;
-    }
+    // isAuth = () => {
+    //     let isAuth = (localStorage.getItem(config.TOKEN) !== undefined
+    //         && localStorage.getItem(config.TOKEN) !== null)
+    //         || config.IS_DEV
+    //     return isAuth;
+    // }
 
     login = (token) => {
-        sessionStorage.setItem(config.TOKEN, token);
+        localStorage.setItem('access_token', token);
     }
 
     logout = () => {
-        sessionStorage.removeItem(config.TOKEN);
+        localStorage.removeItem('access_token');
     }
 };
 

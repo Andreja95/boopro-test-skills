@@ -30,7 +30,7 @@ function Login() {
                 </div>
                 
                 <div className="col-6 pl-4">
-                    <button className={`btn btn-rounded btn-sm mt-2 float-right ${styles.buttons}`} onClick={() => history.push('/home')}>Back to Home</button>
+                    <button className={`btn btn-rounded btn-sm mt-2 float-right ${styles.buttons}`} onClick={() => history.push('/')}>Back to Home</button>
                 </div>     
             </div>
 

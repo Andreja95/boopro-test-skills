@@ -1,33 +1,32 @@
+import React, { useEffect, useState } from 'react';
+import styles from '../assets/css/MovieSliderByGenre.module.css';
 
+export const movieSliderByGenre = ({movie, movieByGenreList, isCurrent, position}) => {
+  
+var minDisplayedMovie = position.minDisplayedMovie;
+var maxDisplayedMovie = position.maxDisplayedMovie;
+var currentMovie = false;
 
-export const movieSliderByGenre = ({genre, movie, movieByGenreList, firstMovie, lastMovie}) => {
-    const minIndexMovie = 0;
-    const maxIndexMovie = movieByGenreList.length;
-   
-    //console.log(movieByGenreList);
-    console.log(firstMovie);
-    console.log(lastMovie);
-    console.log(maxIndexMovie);
     return (
-        <div className = "movieSliderByGenre">
-          
-            <h3>{genre}</h3>
-            <h3>{movie}</h3>  
-                {/* {Object.keys(movieByGenreList).map(function(key) {
-                    return (
-                    <h3 key={key} style={{color:"green"}}>{key.id}</h3>
-                    )
-                })}; */}
+        <div className = "movieSliderByGenre row w-100">
 
-                    {/* {moviesByGenre.list.map((image, index2) => {
-                        return (
-                        // <Carousel.Item>
-                        <div key={index2}>
-                        <span style={{color:'white'}}>{index2}</span>
-                        </div>
-                        // </Carousel.Item>
-                        );
-                    })} */}
+            {movieByGenreList.map((image, index) => {
+                
+                 if(index >= minDisplayedMovie && index <= maxDisplayedMovie) {
+                    if(movie === index && isCurrent) {
+                        currentMovie = true;
+                    } else {
+                        currentMovie = false;
+                    }
+                       return (
+                            <div className={`item col-2 px-0 mx-0 ${currentMovie ? styles.currentItem : null}`} key={index}>
+                                <img className="img-responsive" draggable={false} src={'https://image.tmdb.org/t/p/w500//'+image.poster_path} />
+                            </div>
+                       )       
+                    } 
+                    
+                })}
+                
         </div>
     )
 }
