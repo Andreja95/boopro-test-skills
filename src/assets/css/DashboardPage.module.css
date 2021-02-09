@@ -1,18 +1,21 @@
 .wallpaper {
-  background: #141414;
-  color: white;
+    background: #141414;
+    color: white;
 }
 
 .movie_app > .row {
-  overflow-x: auto;
-  flex-wrap: nowrap;
+    overflow-x: auto;
+    flex-wrap: nowrap;
 }
 
-html, body, #root, .App {
-  height: 100%;
-  width: 100%;
+html,
+body,
+#root,
+.App {
+    height: 100%;
+    width: 100%;
 }
 
 .carousel_control_next {
-  display: none !important;
+    display: none !important;
 }
