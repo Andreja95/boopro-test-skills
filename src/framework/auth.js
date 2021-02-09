@@ -10,11 +10,11 @@ class AuthService {
 
     login = (token) => {
         localStorage.setItem('access_token', token);
-    }
+    };
 
     logout = () => {
         localStorage.removeItem('access_token');
-    }
-};
+    };
+}
 
 export const authService = new AuthService();

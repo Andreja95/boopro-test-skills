@@ -1,17 +1,17 @@
 .wallpaper {
-  height: 100vh;
-  background: url("../img/login-wallpeper.jpg"); 
+    height: 100vh;
+    background: url('../img/login-wallpeper.jpg');
 }
 
 .formStyle {
-  color: #DC1A28;
+    color: #dc1a28;
 }
 
 form {
-  border-radius: 10px;
+    border-radius: 10px;
 }
 
 .buttons {
-  background-color: #DC1A28;
-  color:white
+    background-color: #dc1a28;
+    color: white;
 }
