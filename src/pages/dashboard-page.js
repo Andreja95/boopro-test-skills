@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import Carousel from 'react-bootstrap/Carousel';
 import 'bootstrap/dist/css/bootstrap.css';
 import {getData} from '../services/entity-service';
+import axios from 'axios';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import styles from '../assets/css/DashboardPage.module.css';
 import MovieSliderByGenre from '../components/movieSliderByGenre';
@@ -184,35 +185,24 @@ export const DashboardPage = () => {
     }
 
     useEffect(() => {
-        // call method for fetching data
         getMoviesList();
-    }, []); //empty square bracket works like componentDidMount
+    }, []);
 
     const getMoviesList = () => {
-        fetch('genres.json', {
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-            },
-        })
-            .then(function (response) {
-                //console.log(response)
-                return response.json();
-            })
-            .then(function (myJson) {
-                // console.log(myJson);
-                myJson.map(function (val) {
-                    let genre = val.name;
-                    let id = val.id;
-                    getData(genre, id)
-                        .then((res) => {
-                            setMoviesList((prevState) => [...prevState, res]);
-                        })
-                        .catch((error) => {
-                            //console.log(error);
-                        });
-                });
+        axios.get('genres.json').then((res) => {
+            console.log(res.data);
+            res.data.map(function (val) {
+                let genre = val.name;
+                let id = val.id;
+                getData(genre, id)
+                    .then((res) => {
+                        setMoviesList((prevState) => [...prevState, res]);
+                    })
+                    .catch((error) => {
+                        //console.log(error);
+                    });
             });
+        });
     };
 
     console.log(moviesList);
@@ -221,7 +211,7 @@ export const DashboardPage = () => {
         <body className={styles.wallpaper}>
             <div
                 className='container-fluid h-100'
-                style={{'flex-wrap': 'wrap', display: 'flex'}}>
+                style={{flexWrap: 'wrap', display: 'flex'}}>
                 <h4 style={{color: 'white'}}>
                     CurrentGenre: {currentSelectedGenre}
                 </h4>
