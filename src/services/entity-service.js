@@ -17,8 +17,8 @@ export const login = (email, password) =>
                 authService.login(token); // call authservice.login to set token in localstorage
                 resolve(res.data);
             })
-            .catch(function (res) {
-                reject(res.data);
+            .catch((error) => {
+                reject(error.response.statusText);
             });
     });
 
