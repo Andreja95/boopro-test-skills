@@ -14,7 +14,7 @@ export const movieSliderByGenre = ({
     var currentMovie = false;
 
     return (
-        <div className='movieSliderByGenre row w-100'>
+        <div className='movieSliderByGenre row'>
             {movieByGenreList.map((image, index) => {
                 if (index >= minDisplayedMovie && index <= maxDisplayedMovie) {
                     if (movie === index && isCurrent) {

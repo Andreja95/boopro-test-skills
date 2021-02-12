@@ -14,6 +14,7 @@ class AuthService {
             localStorage.getItem('access_token') !== undefined &&
             localStorage.getItem('access_token') !== null;
         console.log('isauth function');
+        console.log(isAuth);
         return isAuth;
     };
 }
