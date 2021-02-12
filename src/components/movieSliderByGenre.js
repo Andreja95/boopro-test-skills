@@ -1,11 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import styles from '../assets/css/MovieSliderByGenre.module.css';
+import ImageModal from './imageModal';
 
 export const movieSliderByGenre = ({
     movie,
     movieByGenreList,
     isCurrent,
     position,
+    darkMode,
 }) => {
     var minDisplayedMovie = position.minDisplayedMovie;
     var maxDisplayedMovie = position.maxDisplayedMovie;
@@ -22,18 +24,41 @@ export const movieSliderByGenre = ({
                     }
                     return (
                         <div
-                            className={`item col-2 px-0 mx-0 ${
-                                currentMovie ? styles.currentItem : null
-                            }`}
+                            className='item col-2 px-0 mx-0 text-center'
                             key={index}>
-                            <img
-                                className='img-responsive'
-                                draggable={false}
-                                src={
-                                    'https://image.tmdb.org/t/p/w500//' +
-                                    image.poster_path
+                            <div
+                                className={` ${
+                                    currentMovie ? styles.currentItem : null
+                                }`}>
+                                <img
+                                    className='img-responsive'
+                                    draggable={false}
+                                    src={
+                                        'https://image.tmdb.org/t/p/w500//' +
+                                        image.poster_path
+                                    }
+                                />
+                            </div>
+                            <p
+                                className={`${
+                                    currentMovie ? null : styles.currentTitle
+                                }`}>
+                                {image.title}
+                            </p>
+                            {(() => {
+                                if (darkMode && currentMovie) {
+                                    return (
+                                        <ImageModal
+                                            image={JSON.stringify(
+                                                image.poster_path
+                                            )}
+                                            imageTitle={image.title}
+                                            overview={image.overview}
+                                            vote_average={image.vote_average}
+                                        />
+                                    );
                                 }
-                            />
+                            })()}
                         </div>
                     );
                 }
