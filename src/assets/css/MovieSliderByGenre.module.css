@@ -1,5 +1,12 @@
 .currentItem {
-    border: 5px solid red;
+    border: 5px solid red !important;
+}
+.currentTitle {
+    display: none;
+    font-style: italic;
+}
+.popUp {
+    display: none;
 }
 
 .image_container {

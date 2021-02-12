@@ -1,7 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Carousel from 'react-bootstrap/Carousel';
 import 'bootstrap/dist/css/bootstrap.css';
 import {getData} from '../services/entity-service';
+import axios from 'axios';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import styles from '../assets/css/DashboardPage.module.css';
 import MovieSliderByGenre from '../components/movieSliderByGenre';
@@ -10,6 +11,14 @@ export const DashboardPage = () => {
     const [moviesList, setMoviesList] = useState([]); // main list
     const [currentSelectedMovie, setCurrentSelectedMovie] = useState(0); // current movie
     const [currentSelectedGenre, setCurrentSelectedGenre] = useState(0); // current genre
+    const stateRefMovie = useRef();
+    stateRefMovie.current = currentSelectedMovie;
+    const stateRefMovie2 = useRef();
+    stateRefMovie2.current = stateRefMovie.current;
+    const stateRefGenre = useRef();
+    stateRefGenre.current = currentSelectedGenre;
+
+    const [darkMode, setDarkMode] = useState(false);
 
     function updateObject(movie, genre, minDisplayedMovie, maxDisplayedMovie) {
         // funkcija za azuriranje objekta (child komponente) kada se ide kroz filmove
@@ -56,7 +65,7 @@ export const DashboardPage = () => {
             const minIndexGenre = 0; // najmanji index zanra
             const maxIndexGenre = moviesList.length - 1; // najveci index zanra
 
-            if (currentSelectedGenre < minIndexGenre) {
+            if (stateRefGenre.current < minIndexGenre) {
                 // prelaz sa prvog na poslednji zanr
                 setCurrentSelectedGenre(maxIndexGenre);
             }
@@ -65,18 +74,21 @@ export const DashboardPage = () => {
                 moviesList[currentSelectedGenre].position.minDisplayedMovie; // najmanji index prikazanog filma u trenutnom zanru
             const movie = moviesList[currentSelectedGenre].position.movie; // index trenutnog filma u ovom zanru
 
-            // * ideja (oduzeti movie-minDisplayedMovieCurrent) da bi se dobila pozicija trenutnog filma u trenutno prikazanim filmovima
-            // * da se (movie-minDisplayedMovieCurrent) prosledi funkciji updateObjectNextGenre kao pozicija trenutnog filma u sledecem zanru
-            // * nece moci samo preko index-a filmova pr: ako se ode unazad u drugom zanru, trenutni film ce biti najveci index u ovom zanru,
-            // taj index moze biti veci od bilo kod prikazanog indeksa filmova u zanru iznad, i ako se gadja samo index filma onda nece moci da nadje taj film iznad vec ce da resetuje komponentu
-            // * zato je ideja uzeti (movie-minDisplayedMovieCurrent) kao poziciju prikazanog filma
-
             const maxDisplayedMoviePrev =
                 moviesList[currentSelectedGenre - 1].position.maxDisplayedMovie; // najveci index prikazanog filma u zanru iznad
             const minDisplayedMoviePrev =
                 moviesList[currentSelectedGenre - 1].position.minDisplayedMovie; // najmanji index prikazanog filma u zanru iznad
+
+            // console.log('minDisplayedMoviePrev ' + minDisplayedMovieCurrent);
+            // console.log('stateRefGenre.current ' + stateRefMovie2.current);
+            setCurrentSelectedMovie(
+                minDisplayedMoviePrev +
+                    (stateRefMovie2.current - minDisplayedMovieCurrent)
+            );
+
             updateObjectNextGenre(
-                movie - minDisplayedMovieCurrent,
+                minDisplayedMoviePrev +
+                    (stateRefMovie2.current - minDisplayedMovieCurrent),
                 currentSelectedGenre - 1,
                 minDisplayedMoviePrev,
                 maxDisplayedMoviePrev
@@ -89,7 +101,7 @@ export const DashboardPage = () => {
             const minIndexGenre = 0; // najmanji index zanra
             const maxIndexGenre = moviesList.length - 1; // najveci index zanra
 
-            if (currentSelectedGenre > maxIndexGenre) {
+            if (stateRefGenre.current > maxIndexGenre) {
                 // prelaz sa poslednjeg na prvi zanr
                 setCurrentSelectedGenre(minIndexGenre);
             }
@@ -98,16 +110,27 @@ export const DashboardPage = () => {
                 moviesList[currentSelectedGenre].position.minDisplayedMovie; // najmanji index prikazanog filma u trenutnom zanru
             const movie = moviesList[currentSelectedGenre].position.movie; // trenutno prikazani film
 
-            // ista logika kao za up arrow
-            // (movie-minDisplayedMovie) pozicija filma u trenutnom zanru koja bi trebalo da se prenese na sledeci zanr
-
             const maxDisplayedMovieNext =
                 moviesList[currentSelectedGenre + 1].position.maxDisplayedMovie; // najveci index prikazanog filma u zanru ispod
             const minDisplayedMovieNext =
                 moviesList[currentSelectedGenre + 1].position.minDisplayedMovie; // najmanji index prikazanog filma u zanru ispod
+            // console.log('movie: ' + movie);
+            // console.log('minDisplayedMovie: ' + minDisplayedMovie);
+            // console.log('maxDisplayedMovieNext: ' + maxDisplayedMovieNext);
+            // console.log('minDisplayedMovieNext: ' + minDisplayedMovieNext);
+
+            // console.log('minDisplayedMovieNext ' + minDisplayedMovieNext);
+            // console.log('stateRefMovie.current2 ' + stateRefMovie2.current);
+            // console.log('minDisplayedMovie ' + minDisplayedMovie);
+
+            setCurrentSelectedMovie(
+                minDisplayedMovieNext +
+                    (stateRefMovie2.current - minDisplayedMovie)
+            );
 
             updateObjectNextGenre(
-                movie - minDisplayedMovie,
+                minDisplayedMovieNext +
+                    (stateRefMovie2.current - minDisplayedMovie),
                 currentSelectedGenre + 1,
                 minDisplayedMovieNext,
                 maxDisplayedMovieNext
@@ -124,7 +147,7 @@ export const DashboardPage = () => {
             const minDisplayedMovie =
                 moviesList[currentSelectedGenre].position.minDisplayedMovie; // najmanji prikazani film u tom zanru
 
-            if (currentSelectedMovie < minIndexMovie) {
+            if (stateRefMovie.current < minIndexMovie) {
                 // kretanje unazad kada se sa prvog filma ode na poslednji u tom zanru
                 setCurrentSelectedMovie(maxIndexMovie);
                 updateObject(
@@ -133,28 +156,37 @@ export const DashboardPage = () => {
                     maxIndexMovie - 5,
                     maxIndexMovie
                 );
-            } else if (currentSelectedMovie < minDisplayedMovie) {
+            } else if (stateRefMovie.current < minDisplayedMovie) {
                 // kretanje kada se predje najmanji prikazani film
                 updateObject(
-                    currentSelectedMovie,
+                    stateRefMovie.current,
                     currentSelectedGenre,
-                    currentSelectedMovie,
-                    currentSelectedMovie + 5
+                    stateRefMovie.current,
+                    stateRefMovie.current + 5
+                );
+            } else {
+                updateObject(
+                    stateRefMovie.current,
+                    currentSelectedGenre,
+                    minDisplayedMovie,
+                    minDisplayedMovie + 5
                 );
             }
         } else if (e.keyCode == '39') {
             e.preventDefault();
             console.log('right');
             setCurrentSelectedMovie(currentSelectedMovie + 1);
-
             const minIndexMovie =
                 moviesList[currentSelectedGenre].minIndexMovie; // najmanji index filma u tom zanru
             const maxIndexMovie =
                 moviesList[currentSelectedGenre].maxIndexMovie; // najveci index filma u tom zanru
             const maxDisplayedMovie =
                 moviesList[currentSelectedGenre].position.maxDisplayedMovie; // najveci prikazani film u tom zanru
+            // console.log(currentSelectedMovie);
+            // console.log(maxDisplayedMovie);
+            // console.log('stateRefMovie.current: ' + stateRefMovie.current);
 
-            if (currentSelectedMovie > maxIndexMovie) {
+            if (stateRefMovie.current > maxIndexMovie) {
                 // kretanje u napred kada se sa poslednjeg filma predje na prvi u tom zanru
                 setCurrentSelectedMovie(minIndexMovie);
                 updateObject(
@@ -163,13 +195,13 @@ export const DashboardPage = () => {
                     minIndexMovie,
                     minIndexMovie + 5
                 );
-            } else if (currentSelectedMovie > maxDisplayedMovie) {
+            } else if (stateRefMovie.current > maxDisplayedMovie) {
                 // kretanje kada se predje najveci prikazani film
                 updateObject(
-                    currentSelectedMovie,
+                    stateRefMovie.current,
                     currentSelectedGenre,
-                    currentSelectedMovie - 5,
-                    currentSelectedMovie
+                    stateRefMovie.current - 5,
+                    stateRefMovie.current
                 );
             } else {
                 // kretanje u prvom trenutku izmedju 1 i 6.og filma
@@ -180,39 +212,31 @@ export const DashboardPage = () => {
                     maxDisplayedMovie
                 );
             }
+        } else if (e.keyCode == '13') {
+            setDarkMode(true);
+        } else if (e.keyCode == '27') {
+            setDarkMode(false);
         }
     }
 
     useEffect(() => {
-        // call method for fetching data
         getMoviesList();
-    }, []); //empty square bracket works like componentDidMount
+    }, []);
 
     const getMoviesList = () => {
-        fetch('genres.json', {
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json',
-            },
-        })
-            .then(function (response) {
-                //console.log(response)
-                return response.json();
-            })
-            .then(function (myJson) {
-                // console.log(myJson);
-                myJson.map(function (val) {
-                    let genre = val.name;
-                    let id = val.id;
-                    getData(genre, id)
-                        .then((res) => {
-                            setMoviesList((prevState) => [...prevState, res]);
-                        })
-                        .catch((error) => {
-                            //console.log(error);
-                        });
-                });
+        axios.get('genres.json').then((res) => {
+            res.data.map(function (val) {
+                let genre = val.name;
+                let id = val.id;
+                getData(genre, id)
+                    .then((res) => {
+                        setMoviesList((prevState) => [...prevState, res]);
+                    })
+                    .catch((error) => {
+                        //console.log(error);
+                    });
             });
+        });
     };
 
     console.log(moviesList);
@@ -221,17 +245,28 @@ export const DashboardPage = () => {
         <body className={styles.wallpaper}>
             <div
                 className='container-fluid h-100'
-                style={{'flex-wrap': 'wrap', display: 'flex'}}>
-                <h4 style={{color: 'white'}}>
+                style={{flexWrap: 'wrap', display: 'flex'}}>
+                {/* <h4 style={{color: 'white'}}>
                     CurrentGenre: {currentSelectedGenre}
                 </h4>
                 <h4 style={{color: 'white'}}>
                     CurrentMovie: {currentSelectedMovie}
-                </h4>
+                </h4> */}
 
                 {moviesList.length > 0 ? (
                     moviesList.map((moviesByGenre, indexGenre) => (
                         <div className='row row-flex mx-auto'>
+                            {/* <h3>genre: {moviesByGenre.position.genre}/</h3>
+                            <h3>movie: {moviesByGenre.position.movie}/</h3>
+                            <h3>
+                                maxDisplay:{' '}
+                                {moviesByGenre.position.maxDisplayedMovie}/
+                            </h3>
+                            <h3>
+                                minDisplay:{' '}
+                                {moviesByGenre.position.minDisplayedMovie}/
+                            </h3> */}
+
                             <Carousel
                                 className='carousel mt-0 multi-item-carousel'
                                 key={indexGenre}
@@ -254,6 +289,7 @@ export const DashboardPage = () => {
                                         position={
                                             moviesList[indexGenre].position
                                         }
+                                        darkMode={darkMode}
                                     />
                                 </div>
                             </Carousel>
