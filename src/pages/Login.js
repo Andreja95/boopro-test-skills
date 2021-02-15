@@ -2,8 +2,7 @@ import React, {useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import {login} from '../services/entity-service';
 import 'bootstrap/dist/css/bootstrap.css';
-import styles from '../assets/css/Login.module.css';
-//import {authService} from '../framework/auth';
+import styles from '../styles/pages/Login.module.css';
 
 function Login() {
     const [username, setFirstName] = useState('');
@@ -12,7 +11,7 @@ function Login() {
     const callLoginFunc = () => {
         login(username, password)
             .then(() => {
-                history.push('/dashboard-page');
+                history.push('/dashboardPage');
             })
             .catch((error) => {
                 alert(error);

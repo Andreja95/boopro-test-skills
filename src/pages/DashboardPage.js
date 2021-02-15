@@ -4,8 +4,8 @@ import 'bootstrap/dist/css/bootstrap.css';
 import {getData} from '../services/entity-service';
 import axios from 'axios';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import styles from '../assets/css/DashboardPage.module.css';
-import MovieSliderByGenre from '../components/movieSliderByGenre';
+import styles from '../styles/pages/DashboardPage.module.css';
+import MovieSliderByGenre from '../components/MovieSlider/MovieSliderByGenre';
 
 export const DashboardPage = () => {
     const [moviesList, setMoviesList] = useState([]); // main list

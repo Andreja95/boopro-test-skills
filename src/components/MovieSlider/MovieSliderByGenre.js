@@ -1,6 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import styles from '../assets/css/MovieSliderByGenre.module.css';
-import ImageModal from './imageModal';
+import styles from '../../styles/components/MovieSliderByGenre.module.css';
+import ImageModal from '../ImageModal/ImageModal';
 
 export const movieSliderByGenre = ({
     movie,
